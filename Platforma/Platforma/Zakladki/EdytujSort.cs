@@ -19,24 +19,29 @@ namespace Platforma.Zakladki
         private string aktualnaWada;
         private string prefiks;
         private string status;
-        public EdytujSort(string numerCzesci, string wada, string prefiks, string status)
+        private string dataRozpoczecia;
+        private string inzynier;
+        public EdytujSort(string numerCzesci, string wada, string prefiks, string status, string dataRozpoczecia, string inzynier)
         {
             InitializeComponent();
             this.numerCzesci = numerCzesci;
             this.aktualnaWada = wada;
             this.prefiks = prefiks;
             this.status = status;
+            this.dataRozpoczecia = dataRozpoczecia;
+            this.inzynier = inzynier;
+            
 
             labelEdytowanySort.Text = "Informacje na temat sortu częsci nr: " + numerCzesci;
             tbWadaCzesci.Text = wada;
             pobierzListeWpsiow();
-            if (status == "Nie")
+            if (status == "Tak")
             {
-                btnZakonczSort.Text = "Zakończ sort";
+                btnZmienStan.Text = "Zakończ sort";
             }
             else
             {
-                btnZakonczSort.Text = "Aktywuj sort";
+                btnZmienStan.Text = "Aktywuj sort";
             }
         }
 
@@ -60,17 +65,23 @@ namespace Platforma.Zakladki
 
         public void pobierzListeWpsiow()
         {
+            int iloscWszystkichCzesci = 0, iloscWszystkichOk = 0, iloscWszystkichNok = 0;
             listWpisowSortu.Items.Clear();
             DataTable DataTable = SQLHelper.pobierzListeWpisow(prefiks, numerCzesci);
 
             foreach (DataRow row in DataTable.Rows)
             {
                 ListViewItem item = new ListViewItem(row["data"].ToString());
-                item.SubItems.Add(row["iloscSprawdzonych"].ToString());
-                item.SubItems.Add(row["iloscOk"].ToString());
-                item.SubItems.Add(row["IloscNok"].ToString());
+                item.SubItems.Add(row["iloscSprawdzonych"].ToString().Trim());
+                iloscWszystkichCzesci += Convert.ToInt32(row["iloscSprawdzonych"].ToString());
+                item.SubItems.Add(row["iloscOk"].ToString().Trim());
+                iloscWszystkichOk += Convert.ToInt32(row["iloscOk"].ToString());
+                item.SubItems.Add(row["iloscNok"].ToString().Trim());
+                iloscWszystkichNok += Convert.ToInt32(row["iloscNok"].ToString());
                 listWpisowSortu.Items.Add(item);
             }
+
+            labelStatystyki.Text = $"Sprawdzono: {iloscWszystkichCzesci} sztuk, {iloscWszystkichOk} sztuk było OK, znaleziono {iloscWszystkichNok} sztuk NOK";
         }
 
         private bool sprawdzIlosc(int wszystkie, int dobre, int zle)
@@ -84,6 +95,13 @@ namespace Platforma.Zakladki
             {
                 return false;
             }
+        }
+        private void wyczyscPola()
+        {
+            tbData.Text = "";
+            tbIloscWszystkich.Text = "";
+            tbIloscOK.Text = "";
+            tbIloscNOK.Text = "";
         }
         private void btnDodajWpis_Click(object sender, EventArgs e)
         {
@@ -100,6 +118,7 @@ namespace Platforma.Zakladki
                     labelInformacja.ForeColor = System.Drawing.Color.Green;
                     labelInformacja.Text = "Wpis został dodany";
                     pobierzListeWpsiow();
+                    wyczyscPola();
                 }
                 else
                 {
@@ -143,22 +162,32 @@ namespace Platforma.Zakladki
                 } 
             }
         }
-
-        private void btnZakonczSort_Click(object sender, EventArgs e)
+         
+        private void btnZmienStan_Click(object sender, EventArgs e)
         {
-            bool wykonane = SQLHelper.zakonczSort(prefiks, numerCzesci);
+            string zmiana;
+            if (status == "Tak")
+            {
+                zmiana = "Nie";
+            } 
+            else
+            {
+                zmiana = "Tak";
+            }
+
+            bool wykonane = SQLHelper.zakonczSort(prefiks, numerCzesci, zmiana, dataRozpoczecia, inzynier, aktualnaWada);
             if (wykonane)
             {
                 labelInformacja.Visible = true;
-                labelInformacja.ForeColor = System.Drawing.Color.Green;
-                labelInformacja.Text = "Sort został zakończony, zamykanie okna"; 
+                labelInformacja.ForeColor = System.Drawing.Color.Green; 
+                
             }
             else
             {
                 labelInformacja.Visible = true;
                 labelInformacja.ForeColor = System.Drawing.Color.Red;
                 labelInformacja.Text = "Błąd przy próbie zamkniecia sortu";
-            } 
+            }
             this.Close();
         }
     }

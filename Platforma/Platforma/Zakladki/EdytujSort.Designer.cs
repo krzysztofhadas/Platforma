@@ -52,7 +52,7 @@
             this.tbIloscWszystkich = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnZakonczSort = new System.Windows.Forms.Button();
+            this.btnZmienStan = new System.Windows.Forms.Button();
             labelInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -115,7 +115,7 @@
             this.listWpisowSortu.Location = new System.Drawing.Point(305, 25);
             this.listWpisowSortu.MultiSelect = false;
             this.listWpisowSortu.Name = "listWpisowSortu";
-            this.listWpisowSortu.Size = new System.Drawing.Size(483, 450);
+            this.listWpisowSortu.Size = new System.Drawing.Size(409, 450);
             this.listWpisowSortu.TabIndex = 22;
             this.listWpisowSortu.UseCompatibleStateImageBehavior = false;
             this.listWpisowSortu.View = System.Windows.Forms.View.Details;
@@ -265,22 +265,22 @@
             this.label1.TabIndex = 27;
             this.label1.Text = "Data";
             // 
-            // btnZakonczSort
+            // btnZmienStan
             // 
-            this.btnZakonczSort.Location = new System.Drawing.Point(15, 465);
-            this.btnZakonczSort.Name = "btnZakonczSort";
-            this.btnZakonczSort.Size = new System.Drawing.Size(266, 39);
-            this.btnZakonczSort.TabIndex = 38;
-            this.btnZakonczSort.Text = "Zakończ sort";
-            this.btnZakonczSort.UseVisualStyleBackColor = true;
-            this.btnZakonczSort.Click += new System.EventHandler(this.btnZakonczSort_Click);
+            this.btnZmienStan.Location = new System.Drawing.Point(15, 465);
+            this.btnZmienStan.Name = "btnZmienStan";
+            this.btnZmienStan.Size = new System.Drawing.Size(266, 39);
+            this.btnZmienStan.TabIndex = 38;
+            this.btnZmienStan.Text = "Zakończ sort";
+            this.btnZmienStan.UseVisualStyleBackColor = true;
+            this.btnZmienStan.Click += new System.EventHandler(this.btnZmienStan_Click);
             // 
             // EdytujSort
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 568);
-            this.Controls.Add(this.btnZakonczSort);
+            this.ClientSize = new System.Drawing.Size(716, 568);
+            this.Controls.Add(this.btnZmienStan);
             this.Controls.Add(this.labelInformacja);
             this.Controls.Add(this.btnUsunInformacje);
             this.Controls.Add(this.btnDodajWpis);
@@ -333,6 +333,6 @@
         private System.Windows.Forms.TextBox tbIloscWszystkich;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnZakonczSort;
+        private System.Windows.Forms.Button btnZmienStan;
     }
 }

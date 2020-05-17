@@ -49,7 +49,7 @@
             // 
             // btnDodajSort
             // 
-            this.btnDodajSort.Location = new System.Drawing.Point(6, 85);
+            this.btnDodajSort.Location = new System.Drawing.Point(8, 144);
             this.btnDodajSort.Name = "btnDodajSort";
             this.btnDodajSort.Size = new System.Drawing.Size(149, 53);
             this.btnDodajSort.TabIndex = 0;
@@ -59,7 +59,7 @@
             // 
             // btnEdytujSort
             // 
-            this.btnEdytujSort.Location = new System.Drawing.Point(6, 144);
+            this.btnEdytujSort.Location = new System.Drawing.Point(6, 204);
             this.btnEdytujSort.Name = "btnEdytujSort";
             this.btnEdytujSort.Size = new System.Drawing.Size(148, 52);
             this.btnEdytujSort.TabIndex = 1;
@@ -69,7 +69,7 @@
             // 
             // btnUsunSort
             // 
-            this.btnUsunSort.Location = new System.Drawing.Point(6, 203);
+            this.btnUsunSort.Location = new System.Drawing.Point(6, 262);
             this.btnUsunSort.Name = "btnUsunSort";
             this.btnUsunSort.Size = new System.Drawing.Size(148, 53);
             this.btnUsunSort.TabIndex = 2;
@@ -79,7 +79,7 @@
             // 
             // btnZakonczoneSorty
             // 
-            this.btnZakonczoneSorty.Location = new System.Drawing.Point(7, 262);
+            this.btnZakonczoneSorty.Location = new System.Drawing.Point(8, 85);
             this.btnZakonczoneSorty.Name = "btnZakonczoneSorty";
             this.btnZakonczoneSorty.Size = new System.Drawing.Size(148, 53);
             this.btnZakonczoneSorty.TabIndex = 3;

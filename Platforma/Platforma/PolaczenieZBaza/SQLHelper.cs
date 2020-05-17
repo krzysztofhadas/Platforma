@@ -24,7 +24,7 @@ namespace Platforma.PolaczenieZBazą
                 {
                     using (var komenda = polaczenie.CreateCommand())
                     {
-                        komenda.CommandText = $"insert into dbo.ListaSortow(prefix, numerCzesci, linia, dataUruchomienia, firmaDostawca, inzynier, opisProblemu, status) values ('{prefiks}', '{numer}', '{linia}', '{data}', '{firma}', '{inzynier}', '{opis}', 'Nie')";
+                        komenda.CommandText = $"insert into dbo.ListaSortow(prefix, numerCzesci, linia, dataUruchomienia, firmaDostawca, inzynier, opisProblemu, status) values ('{prefiks}', '{numer}', '{linia}', '{data}', '{firma}', '{inzynier}', '{opis}', 'Tak')";
                         polaczenie.Open();
                         komenda.ExecuteNonQuery();
                         SqlDataAdapter SqlDataAdap = new SqlDataAdapter(komenda);
@@ -60,7 +60,7 @@ namespace Platforma.PolaczenieZBazą
             {
                 using (SqlConnection cnn = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand($"insert into dbo.SzczegolySortowania(prefix, data, numerCzesci, iloscSprawdzonych, iloscOk, IloscNok) values ('{prefix}', '{data}', {numerCzesci}, {iloscSprawdzonych}, {iloscOK}, {iloscNok})", cnn))
+                    using (SqlCommand command = new SqlCommand($"insert into dbo.SzczegolySortowania(prefix, data, numerCzesci, iloscSprawdzonych, iloscOk, IloscNok) values ('{prefix}', '{data}', '{numerCzesci}', {iloscSprawdzonych}, {iloscOK}, {iloscNok})", cnn))
                     {
                         cnn.Open();
                         command.ExecuteNonQuery();
@@ -94,7 +94,7 @@ namespace Platforma.PolaczenieZBazą
         }
 
         public static DataTable pobierzListeSortow(string status)
-        { 
+        {
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand($"select * from [dbo].[ListaSortow] where status = '{status}' order by id", cnn))
@@ -109,6 +109,23 @@ namespace Platforma.PolaczenieZBazą
             }
         }
 
+        public static DataTable pobierzListeRaportow()
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"select * from [dbo].[raporty]", cnn))
+                {
+                    cnn.Open();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    DataTable dtWynik = new DataTable();
+                    SqlDataAdap.Fill(dtWynik);
+                    cnn.Close();
+                    return dtWynik;
+                }
+            }
+        }
+
+        
         public static DataTable pobierzListeWpisow(string prefiks, string numerCzesci)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -140,17 +157,83 @@ namespace Platforma.PolaczenieZBazą
             }
         }
 
-        internal static bool zakonczSort(string prefiks, string numerCzesci)
+        internal static bool zakonczSort(string prefiks, string numerCzesci, string status, string dataRozpoczecia, string inzynier, string wady)
+        {
+            DateTime today = DateTime.Today;
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            { 
+                if(status == "Nie")
+                {
+                    using (SqlCommand command = new SqlCommand($"UPDATE dbo.ListaSortow SET status = '{status}' where prefix = '{prefiks}' and numerCzesci = '{numerCzesci}';" +
+                                                           $"insert into [dbo].[raporty](identyfikatorSortu, numerCzesci, dataUruchomienia, dataZakonczenia, inzynier, wady) values ('{prefiks}','{numerCzesci}','{dataRozpoczecia}', '{today.ToString("dd-MM-yyyy")}', '{inzynier}', '{wady}')", cnn))
+                    {
+                        cnn.Open();
+                        command.ExecuteNonQuery();
+                        SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                        cnn.Close();
+                        return true;
+                    }
+                }
+                else
+                {
+                    using (SqlCommand command = new SqlCommand($"UPDATE dbo.ListaSortow SET status = '{status}' where prefix = '{prefiks}' and numerCzesci = '{numerCzesci}';" +
+                                                           $"delete from dbo.raporty where identyfikatorSortu = '{prefiks}'", cnn))
+                    {
+                        cnn.Open();
+                        command.ExecuteNonQuery();
+                        SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                        cnn.Close();
+                        return true;
+                    }
+                }
+                
+            }
+        }
+
+        public static DataTable sumaWszystkichCzesci(string prefiks, string numerCzesci)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand($"UPDATE dbo.ListaSortow SET status = 'Tak' where prefix = '{prefiks}' and numerCzesci = '{numerCzesci}'", cnn))
+                using (SqlCommand command = new SqlCommand($"select sum(iloscSprawdzonych) from [dbo].[SzczegolySortowania] where prefix = '{prefiks}' and numerCzesci = '{numerCzesci}'", cnn))
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
                     SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    DataTable dtWynik = new DataTable();
+                    SqlDataAdap.Fill(dtWynik);
                     cnn.Close();
-                    return true;
+                    return dtWynik;
+                }
+            }
+        }
+
+        public static DataTable sumaWszystkichDobrychCzesci(string prefiks, string numerCzesci)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"select sum(iloscOk) from [dbo].[SzczegolySortowania] where prefix = '{prefiks}' and numerCzesci = '{numerCzesci}'", cnn))
+                {
+                    cnn.Open();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    DataTable dtWynik = new DataTable();
+                    SqlDataAdap.Fill(dtWynik);
+                    cnn.Close();
+                    return dtWynik;
+                }
+            }
+        }
+
+        public static DataTable sumaWszystkichWadliwychCzesci(string prefiks, string numerCzesci)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"select sum(iloscNok) from [dbo].[SzczegolySortowania] where prefix = '{prefiks}' and numerCzesci = '{numerCzesci}'", cnn))
+                {
+                    cnn.Open();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    DataTable dtWynik = new DataTable();
+                    SqlDataAdap.Fill(dtWynik);
+                    cnn.Close();
+                    return dtWynik;
                 }
             }
         }

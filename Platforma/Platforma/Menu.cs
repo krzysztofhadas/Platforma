@@ -17,7 +17,7 @@ namespace Platforma
         public Menu()
         {
             InitializeComponent();
-            pobierzListeSortow("Tak");
+            pobierzListeSortow("Tak"); 
         }
 
         private void btnZamknij_Click(object sender, EventArgs e)
@@ -27,7 +27,8 @@ namespace Platforma
 
         private void btnRaporty_Click(object sender, EventArgs e)
         {
-
+            Raporty Raporty = new Raporty();
+            Raporty.Show();
         }
 
         private void btnZakonczoneSorty_Click(object sender, EventArgs e)
@@ -53,8 +54,10 @@ namespace Platforma
                 string wada = listaAktywnychSortow.SelectedItems[0].SubItems[6].Text;
                 string prefiks = listaAktywnychSortow.SelectedItems[0].SubItems[0].Text;
                 string status = listaAktywnychSortow.SelectedItems[0].SubItems[7].Text;
+                string data = listaAktywnychSortow.SelectedItems[0].SubItems[3].Text;
+                string inzynier = listaAktywnychSortow.SelectedItems[0].SubItems[5].Text;
 
-                EdytujSort edytujSort = new EdytujSort(numerCzesci, wada, prefiks, status);
+                EdytujSort edytujSort = new EdytujSort(numerCzesci, wada, prefiks, status, data, inzynier);
                 edytujSort.Show();
             } 
         }
@@ -77,16 +80,17 @@ namespace Platforma
             foreach (DataRow row in dt.Rows)
             {
                 ListViewItem item = new ListViewItem(row["prefix"].ToString());
-                item.SubItems.Add(row["numerCzesci"].ToString());
-                item.SubItems.Add(row["linia"].ToString());
-                item.SubItems.Add(row["dataUruchomienia"].ToString());
-                item.SubItems.Add(row["firmaDostawca"].ToString());
-                item.SubItems.Add(row["inzynier"].ToString());
-                item.SubItems.Add(row["opisProblemu"].ToString());
-                item.SubItems.Add((row["status"].ToString()));
+                item.SubItems.Add(row["numerCzesci"].ToString().Trim());
+                item.SubItems.Add(row["linia"].ToString().Trim());
+                item.SubItems.Add(row["dataUruchomienia"].ToString().Trim());
+                item.SubItems.Add(row["firmaDostawca"].ToString().Trim());
+                item.SubItems.Add(row["inzynier"].ToString().Trim());
+                item.SubItems.Add(row["opisProblemu"].ToString().Trim());
+                item.SubItems.Add((row["status"].ToString().Trim()));
                 listaAktywnychSortow.Items.Add(item);
             }
             
         }
+         
     }
 }
