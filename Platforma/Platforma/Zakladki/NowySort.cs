@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Platforma.Zakladki;
+using Platforma.PolaczenieZBazą;
 
 namespace Platforma.Zakladki
 {
@@ -16,8 +17,34 @@ namespace Platforma.Zakladki
         public NowySort()
         {
             InitializeComponent();
+            ustawienieKontrolkiDaty();
+            uzupelnijSlownikLinii(); 
         }
 
+        private void uzupelnijSlownikLinii()
+        {
+            DataTable DataTable = SQLHelper.pobierListeSlownikow();
+            foreach (DataRow row in DataTable.Rows)
+            {
+                if(row[1].ToString().Trim() == "Linia")
+                {
+                    cbLinia.Items.Add(row["wartoscSlownika"].ToString().Trim());
+                }
+                if (row[1].ToString().Trim() == "Firma")
+                {
+                    cbFirma.Items.Add(row["wartoscSlownika"].ToString().Trim());
+                }
+                if (row[1].ToString().Trim() == "Inzynier")
+                {
+                    cbInzynier.Items.Add(row["wartoscSlownika"].ToString().Trim());
+                }
+            }
+        }
+        private void ustawienieKontrolkiDaty()
+        {
+            dataPicker.Format = DateTimePickerFormat.Custom;
+            dataPicker.CustomFormat = "dd-MM-yyyy"; 
+        }
         private void labelInformacja_Click(object sender, EventArgs e)
         {
             labelInformacja.Visible = false;
@@ -41,21 +68,20 @@ namespace Platforma.Zakladki
         }
 
         private void btnDodajSort_Click(object sender, EventArgs e)
-        {
-
+        { 
             string numer = tbNumerCzesci.Text.Trim();
-            string linia = tbLinia.Text.Trim();
-            string data = tbDataUruchomienia.Text.Trim();
+            string linia = cbLinia.Text.Trim();
+            string data = dataPicker.Text.Trim();
             string opis = tbOpis.Text.Trim();
-            string inzynier = tbInzynier.Text.Trim();
-            string firma = tbDostawcaCzesci.Text.Trim();
+            string inzynier = cbInzynier.Text.Trim();
+            string firma = cbFirma.Text.Trim();
             string prefiks = tbPrefix.Text.Trim();
 
             if (sprawdzZawartoscTextBox(prefiks, numer, linia, data, opis, inzynier, firma) == true)
             { 
                 try
                 {
-                    PolaczenieZBazą.SQLHelper.dodajSort(prefiks, numer, linia, data, opis, inzynier, firma);
+                    SQLHelper.dodajSort(prefiks, numer, linia, data, opis, inzynier, firma);
                     labelInformacja.Visible = true;
                     labelInformacja.ForeColor = System.Drawing.Color.Green;
                     labelInformacja.Text = "Dodano sort";

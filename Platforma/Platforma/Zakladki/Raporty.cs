@@ -30,32 +30,11 @@ namespace Platforma.Zakladki
                 item.SubItems.Add(row["dataZakonczenia"].ToString().Trim());
                 item.SubItems.Add(row["inzynier"].ToString().Trim());
                 item.SubItems.Add(row["wady"].ToString().Trim());
+                item.SubItems.Add(row["norma"].ToString().Trim());
+                item.SubItems.Add(row["kosztNormogodziny"].ToString().Trim());
                 listaRaportow.Items.Add(item);
             }
-        }
-
-        public void test()
-        {
-             /*  
-              
-            for (int i = 0; i < numerWierszy-1; i++)
-            {
-                 
-                    Console.WriteLine(i);
-                    t.Rows[(i+1)].Cells[0].Paragraphs.First().Append(tablica[i, 0]);
-                    t.Rows[(i+1)].Cells[1].Paragraphs.First().Append(tablica[i, 1]);
-                    t.Rows[(i+1)].Cells[2].Paragraphs.First().Append(tablica[i, 2]);
-                    t.Rows[(i + 1)].Cells[3].Paragraphs.First().Append(tablica[i, 3]);
-                
-            }
-            doc.InsertTable(t);
-
-
-            doc.Save();
-            Process.Start("WINWORD.exe", filename);
-
-            */
-        }
+        } 
 
         private void btnStworzRaport_Click(object sender, EventArgs e)
         {
@@ -75,10 +54,10 @@ namespace Platforma.Zakladki
                                      "Miejsce sortowania: Wabco";
 
                 string lewaStrona = $"Identyfikator sortowania: {identyfikatorSortu}" + Environment.NewLine +
-                                        $"Numer sortowanych części: {numerCzesci}" + Environment.NewLine + 
+                                        $"Numer części: {numerCzesci}" + Environment.NewLine + 
                                         $"Sortowanie zostało zlecone przez: " + Environment.NewLine +
                                         $"{inzynier} dnia {dataRozpoczeciaSortu}" + Environment.NewLine +
-                                        $"Wady zgłoszone przez osobę zlecającą:" + Environment.NewLine +
+                                        $"Zgłoszone wady:" + Environment.NewLine +
                                         wady + Environment.NewLine;
 
                 Paragraph par1 = doc.InsertParagraph(prawaStrona);
@@ -89,7 +68,7 @@ namespace Platforma.Zakladki
 
                 Paragraph par = doc.InsertParagraph(lewaStrona);
                 par.Alignment = Alignment.left;
-                par.FontSize(12d);
+                par.FontSize(11d);
                 par.Font("Arial");
                 par.Position(5);
 
@@ -104,21 +83,21 @@ namespace Platforma.Zakladki
                 var dt = SQLHelper.pobierzListeWpisow(identyfikatorSortu, numerCzesci); 
 
                 Table t = doc.AddTable(dt.Rows.Count+1, 4);
-                t.Design = TableDesign.TableNormal;
-                t.Alignment = Alignment.center;
-                
+                //t.Design = TableDesign.TableNormal; 
+                t.Design = TableDesign.TableGrid;
 
-                t.Rows[0].Cells[0].Paragraphs.First().Append("Data");
-                t.Rows[0].Cells[1].Paragraphs.First().Append("Ilość sprawdzonych sztuk");
-                t.Rows[0].Cells[2].Paragraphs.First().Append("Ilość dobrych sztuk");
-                t.Rows[0].Cells[3].Paragraphs.First().Append("Ilość złych sztuk");
+
+                t.Rows[0].Cells[0].Paragraphs.First().Append("Data").Alignment = Alignment.center;
+                t.Rows[0].Cells[1].Paragraphs.First().Append("Ilość sprawdzonych sztuk").Alignment = Alignment.center;
+                t.Rows[0].Cells[2].Paragraphs.First().Append("Ilość dobrych sztuk").Alignment = Alignment.center;
+                t.Rows[0].Cells[3].Paragraphs.First().Append("Ilość złych sztuk").Alignment = Alignment.center;
 
                 for (int i = 0, j = 1; i < dt.Rows.Count; i++,j++)
                 {
-                    t.Rows[j].Cells[0].Paragraphs.First().Append(dt.Rows[i][2].ToString());
-                    t.Rows[j].Cells[1].Paragraphs.First().Append(dt.Rows[i][4].ToString());
-                    t.Rows[j].Cells[2].Paragraphs.First().Append(dt.Rows[i][5].ToString());
-                    t.Rows[j].Cells[3].Paragraphs.First().Append(dt.Rows[i][6].ToString());
+                    t.Rows[j].Cells[0].Paragraphs.First().Append(dt.Rows[i][2].ToString()).Alignment = Alignment.center;
+                    t.Rows[j].Cells[1].Paragraphs.First().Append(dt.Rows[i][4].ToString()).Alignment = Alignment.center;
+                    t.Rows[j].Cells[2].Paragraphs.First().Append(dt.Rows[i][5].ToString()).Alignment = Alignment.center;
+                    t.Rows[j].Cells[3].Paragraphs.First().Append(dt.Rows[i][6].ToString()).Alignment = Alignment.center;
                 }
                 doc.InsertTable(t);
 
@@ -127,22 +106,36 @@ namespace Platforma.Zakladki
                 var iloscZlychSztuk = SQLHelper.sumaWszystkichWadliwychCzesci(identyfikatorSortu, numerCzesci);
 
 
-                string statystyki = Environment.NewLine + "Statystyki sortowania: " + Environment.NewLine +
+                string statystyki = Environment.NewLine + "Statystyki sortowania" + Environment.NewLine +
                                     $"Suma przesortowanych części: {iloscWszystkichCzesci.Rows[0][0]}" + Environment.NewLine +
                                     $"Ilość dobrych sztuk: {iloscDobrychSztuk.Rows[0][0]}" + Environment.NewLine +
                                     $"Ilość wadliwych sztuk: {iloscZlychSztuk.Rows[0][0]}";
 
                 Paragraph stats = doc.InsertParagraph(statystyki);
-                stats.Alignment = Alignment.left;
-                stats.FontSize(12d);
+                stats.Alignment = Alignment.right;
+                stats.FontSize(11d);
                 stats.Font("Arial");
                 stats.Position(4);
+
+                double normogodzina = Convert.ToDouble(listaRaportow.SelectedItems[0].SubItems[6].Text.Trim());
+                double kosztNormogodziny = Convert.ToDouble(listaRaportow.SelectedItems[0].SubItems[7].Text.Trim());
+                double liczbaNormogodzin = Convert.ToDouble(iloscWszystkichCzesci.Rows[0][0]) / normogodzina;
+                double cena = liczbaNormogodzin * kosztNormogodziny;
+                string kosztSortu = "Norma godzinowa: " + normogodzina + Environment.NewLine +
+                                  $"Cena normogodziny: " + kosztNormogodziny + Environment.NewLine +
+                                  $"Koszt sortowania: " + Math.Round(cena,2);
+
+                Paragraph kosztObslugi = doc.InsertParagraph(kosztSortu);
+                kosztObslugi.Alignment = Alignment.left;
+                kosztObslugi.FontSize(11d);
+                kosztObslugi.Font("Arial");
+                kosztObslugi.Position(4);
 
                 string podpis = Environment.NewLine + "........................" + Environment.NewLine +
                                 "Podpis inżyniera";
 
                 Paragraph pod = doc.InsertParagraph(podpis);
-                pod.Alignment = Alignment.left;
+                pod.Alignment = Alignment.right;
                 pod.FontSize(12d);
                 pod.Font("Arial");
                 pod.Position(4);
@@ -150,6 +143,41 @@ namespace Platforma.Zakladki
                 doc.Save();
                 Process.Start("WINWORD.exe", filename);
             }
+        }
+
+        private void btnAktualizujKosztSortowania_Click(object sender, EventArgs e)
+        {
+            if (listaRaportow.SelectedItems.Count > 0)
+            {
+                if(tbNormogodzina.Text != "" || tbKosztNormogodziny.Text != "")
+                {
+                    string identyfikator = listaRaportow.SelectedItems[0].SubItems[0].Text.Trim();
+
+                    bool pusto = false;
+                    if (listaRaportow.SelectedItems[0].SubItems[6].Text.Trim() == "" || listaRaportow.SelectedItems[0].SubItems[7].Text.Trim() == "")
+                    {
+                        pusto = true;
+                    }
+                    
+                    if (pusto)
+                    {
+                        SQLHelper.aktualizujDaneKosztuSortowania(tbNormogodzina.Text, tbKosztNormogodziny.Text, identyfikator, true);
+                        listaRaportow.Items.Clear();
+                        pobierzListeRaportow();
+                    }
+                    else
+                    {
+                        SQLHelper.aktualizujDaneKosztuSortowania(tbNormogodzina.Text, tbKosztNormogodziny.Text, identyfikator, false);
+                        listaRaportow.Items.Clear();
+                        pobierzListeRaportow();
+                    }
+                } 
+            } 
+        }
+
+        private void btnZamknij_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

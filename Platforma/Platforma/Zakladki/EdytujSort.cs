@@ -24,6 +24,7 @@ namespace Platforma.Zakladki
         public EdytujSort(string numerCzesci, string wada, string prefiks, string status, string dataRozpoczecia, string inzynier)
         {
             InitializeComponent();
+            ustawienieKontrolkiDaty();
             this.numerCzesci = numerCzesci;
             this.aktualnaWada = wada;
             this.prefiks = prefiks;
@@ -45,6 +46,11 @@ namespace Platforma.Zakladki
             }
         }
 
+        private void ustawienieKontrolkiDaty()
+        {
+            dataPicker.Format = DateTimePickerFormat.Custom;
+            dataPicker.CustomFormat = "dd-MM-yyyy";
+        }
         private void btnAktualizujWade_Click(object sender, EventArgs e)
         {
             string nowaWada = tbWadaCzesci.Text;
@@ -97,15 +103,14 @@ namespace Platforma.Zakladki
             }
         }
         private void wyczyscPola()
-        {
-            tbData.Text = "";
+        { 
             tbIloscWszystkich.Text = "";
             tbIloscOK.Text = "";
             tbIloscNOK.Text = "";
         }
         private void btnDodajWpis_Click(object sender, EventArgs e)
         {
-            string data = tbData.Text;
+            string data = dataPicker.Text;
             int iloscWszystkich = Convert.ToInt32(tbIloscWszystkich.Text);
             int iloscOk = Convert.ToInt32(tbIloscOK.Text);
             int iloscNok = Convert.ToInt32(tbIloscNOK.Text);

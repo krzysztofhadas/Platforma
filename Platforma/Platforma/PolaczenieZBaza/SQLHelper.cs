@@ -13,7 +13,7 @@ namespace Platforma.PolaczenieZBazą
     class SQLHelper
     {
 
-        public static string connectionString = Properties.Settings.Default.CString;
+        private static string connectionString = Properties.Settings.Default.CString;
 
 
         public static bool dodajSort(string prefiks, string numer, string linia, string data, string opis, string inzynier, string firma)
@@ -40,11 +40,111 @@ namespace Platforma.PolaczenieZBazą
 
         }
 
+        public static DataTable pobierListeSlownikow()
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"select * from [dbo].[Slowniki]", cnn))
+                {
+                    cnn.Open();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    DataTable dtWynik = new DataTable();
+                    SqlDataAdap.Fill(dtWynik);
+                    cnn.Close();
+                    return dtWynik;
+                }
+            }
+        }
+
+        public static bool dodajWartoscSlownika(string typ, string wartosc)
+        { 
+            try
+            {
+                using (var polaczenie = new SqlConnection(connectionString))
+                {
+                    using (var komenda = polaczenie.CreateCommand())
+                    {
+                        komenda.CommandText = $"insert into[dbo].[Slowniki] (typSlownika, wartoscSlownika) values('{typ}','{wartosc}')";
+                        polaczenie.Open();
+                        komenda.ExecuteNonQuery();
+                        SqlDataAdapter SqlDataAdap = new SqlDataAdapter(komenda);
+                        polaczenie.Close();
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        internal static bool usunWartoscSlownika(string typ, string wartosc)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"delete from [dbo].[Slowniki] where typSlownika = '{typ}' and wartoscSlownika ='{wartosc}'", cnn))
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    cnn.Close();
+                    return true;
+                }
+            }
+        }
+
+        public static bool logujUzytkownika(string login, string haslo)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"select * from [dbo].[Operatorzy] where uzytkownik = '{login}' and haslo = '{haslo}'", cnn))
+                {
+                    cnn.Open();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    DataTable dtWynik = new DataTable();
+                    SqlDataAdap.Fill(dtWynik);
+                    if(dtWynik.Rows.Count == 1)
+                    {
+                        cnn.Close();
+                        return true; 
+                    }
+                    else
+                    {
+                        cnn.Close();
+                        return false; 
+                    } 
+                }
+            }
+        }
+        public static bool sprawdzUprawnieniaAdministratora(string aktywnyUzytkownik)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"select * from [dbo].[Operatorzy] where uzytkownik = '{aktywnyUzytkownik}' and rola = 'Administrator'", cnn))
+                {
+                    cnn.Open();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    DataTable dtWynik = new DataTable();
+                    SqlDataAdap.Fill(dtWynik);
+                    if (dtWynik.Rows.Count == 1)
+                    {
+                        cnn.Close();
+                        return true;
+                    }
+                    else
+                    {
+                        cnn.Close();
+                        return false;
+                    }
+                }
+            }
+        }
         public static void usunSort(string prefiks)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand($" DELETE FROM dbo.ListaSortow WHERE prefix = '{prefiks}'", cnn))
+                using (SqlCommand command = new SqlCommand($"DELETE FROM dbo.ListaSortow WHERE prefix = '{prefiks}'", cnn))
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
@@ -113,7 +213,7 @@ namespace Platforma.PolaczenieZBazą
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand($"select * from [dbo].[raporty]", cnn))
+                using (SqlCommand command = new SqlCommand($"select r.identyfikatorSortu, r.numerCzesci, r.dataUruchomienia, r.dataZakonczenia, r.inzynier, r.wady, k.norma, k.kosztNormogodziny from[dbo].[raporty] r left join[dbo].[KosztSortowania] k on r.identyfikatorSortu = k.identyfikatorSortu", cnn))
                 {
                     cnn.Open();
                     SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
@@ -187,6 +287,49 @@ namespace Platforma.PolaczenieZBazą
                     }
                 }
                 
+            }
+        }
+         
+        public static bool aktualizujDaneKosztuSortowania(string norma, string kosztNormogodziny, string identyfikator, bool nowy)
+        {
+            if(nowy)
+            {
+                dodajKosztSortu(norma, kosztNormogodziny, identyfikator);
+                return true;
+            }
+            else
+            {
+                aktualizujKosztSortu(norma, kosztNormogodziny, identyfikator);
+                return true;
+            }
+        }
+        private static bool dodajKosztSortu(string norma, string kosztNormogodziny, string identyfikator)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"insert into [dbo].[KosztSortowania](identyfikatorSortu, norma, kosztNormogodziny) values ('{identyfikator}', '{norma}', '{kosztNormogodziny}')", cnn))
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    cnn.Close();
+                    return true;
+                }
+            }
+        }
+
+        private static bool aktualizujKosztSortu(string norma, string kosztNormogodziny, string identyfikator)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand($"update [dbo].[KosztSortowania] set norma = '{norma}', kosztNormogodziny = '{kosztNormogodziny}' where identyfikatorSortu = '{identyfikator}'", cnn))
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                    SqlDataAdapter SqlDataAdap = new SqlDataAdapter(command);
+                    cnn.Close();
+                    return true;
+                }
             }
         }
 

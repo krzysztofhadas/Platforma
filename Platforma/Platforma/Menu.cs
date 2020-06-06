@@ -14,15 +14,30 @@ namespace Platforma
 {
     public partial class Menu : Form
     {
-        public Menu()
+        private string aktywnyUzytkownik;
+        public Menu(string login)
         {
             InitializeComponent();
-            pobierzListeSortow("Tak"); 
+            pobierzListeSortow("Tak");
+            aktywnyUzytkownik = login;
+            sprawdzRoleOperatora();
         }
-
+        
+        private void sprawdzRoleOperatora()
+        {
+            bool wynik = SQLHelper.sprawdzUprawnieniaAdministratora(aktywnyUzytkownik);
+            if (wynik)
+            {
+                btnSlowniki.Show();
+            }
+            else
+            {
+                btnSlowniki.Hide();
+            }
+        }
         private void btnZamknij_Click(object sender, EventArgs e)
         {
-            this.Close();
+            System.Environment.Exit(0);
         }
 
         private void btnRaporty_Click(object sender, EventArgs e)
@@ -91,6 +106,11 @@ namespace Platforma
             }
             
         }
-         
+
+        private void btnSlowniki_Click(object sender, EventArgs e)
+        {
+            Slowniki Slowniki = new Slowniki();
+            Slowniki.Show();
+        }
     }
 }

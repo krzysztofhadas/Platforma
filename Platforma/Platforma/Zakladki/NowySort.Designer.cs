@@ -30,10 +30,6 @@
         {
             this.tbPrefix = new System.Windows.Forms.TextBox();
             this.tbNumerCzesci = new System.Windows.Forms.TextBox();
-            this.tbLinia = new System.Windows.Forms.TextBox();
-            this.tbDataUruchomienia = new System.Windows.Forms.TextBox();
-            this.tbDostawcaCzesci = new System.Windows.Forms.TextBox();
-            this.tbInzynier = new System.Windows.Forms.TextBox();
             this.labelNumerCzesci = new System.Windows.Forms.Label();
             this.labelPrefix = new System.Windows.Forms.Label();
             this.labelLinia = new System.Windows.Forms.Label();
@@ -45,6 +41,10 @@
             this.btnDodajSort = new System.Windows.Forms.Button();
             this.btnZamknij = new System.Windows.Forms.Button();
             this.labelInformacja = new System.Windows.Forms.Label();
+            this.dataPicker = new System.Windows.Forms.DateTimePicker();
+            this.cbLinia = new System.Windows.Forms.ComboBox();
+            this.cbFirma = new System.Windows.Forms.ComboBox();
+            this.cbInzynier = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // tbPrefix
@@ -60,34 +60,6 @@
             this.tbNumerCzesci.Name = "tbNumerCzesci";
             this.tbNumerCzesci.Size = new System.Drawing.Size(172, 20);
             this.tbNumerCzesci.TabIndex = 1;
-            // 
-            // tbLinia
-            // 
-            this.tbLinia.Location = new System.Drawing.Point(21, 130);
-            this.tbLinia.Name = "tbLinia";
-            this.tbLinia.Size = new System.Drawing.Size(172, 20);
-            this.tbLinia.TabIndex = 2;
-            // 
-            // tbDataUruchomienia
-            // 
-            this.tbDataUruchomienia.Location = new System.Drawing.Point(277, 47);
-            this.tbDataUruchomienia.Name = "tbDataUruchomienia";
-            this.tbDataUruchomienia.Size = new System.Drawing.Size(172, 20);
-            this.tbDataUruchomienia.TabIndex = 3;
-            // 
-            // tbDostawcaCzesci
-            // 
-            this.tbDostawcaCzesci.Location = new System.Drawing.Point(277, 85);
-            this.tbDostawcaCzesci.Name = "tbDostawcaCzesci";
-            this.tbDostawcaCzesci.Size = new System.Drawing.Size(172, 20);
-            this.tbDostawcaCzesci.TabIndex = 4;
-            // 
-            // tbInzynier
-            // 
-            this.tbInzynier.Location = new System.Drawing.Point(277, 130);
-            this.tbInzynier.Name = "tbInzynier";
-            this.tbInzynier.Size = new System.Drawing.Size(172, 20);
-            this.tbInzynier.TabIndex = 5;
             // 
             // labelNumerCzesci
             // 
@@ -193,11 +165,49 @@
             this.labelInformacja.Visible = false;
             this.labelInformacja.Click += new System.EventHandler(this.labelInformacja_Click);
             // 
+            // dataPicker
+            // 
+            this.dataPicker.Location = new System.Drawing.Point(277, 43);
+            this.dataPicker.Name = "dataPicker";
+            this.dataPicker.Size = new System.Drawing.Size(172, 20);
+            this.dataPicker.TabIndex = 21;
+            // 
+            // cbLinia
+            // 
+            this.cbLinia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLinia.FormattingEnabled = true;
+            this.cbLinia.Location = new System.Drawing.Point(21, 131);
+            this.cbLinia.Name = "cbLinia";
+            this.cbLinia.Size = new System.Drawing.Size(172, 21);
+            this.cbLinia.TabIndex = 22;
+            // 
+            // cbFirma
+            // 
+            this.cbFirma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFirma.FormattingEnabled = true;
+            this.cbFirma.Location = new System.Drawing.Point(277, 85);
+            this.cbFirma.Name = "cbFirma";
+            this.cbFirma.Size = new System.Drawing.Size(172, 21);
+            this.cbFirma.TabIndex = 23;
+            // 
+            // cbInzynier
+            // 
+            this.cbInzynier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbInzynier.FormattingEnabled = true;
+            this.cbInzynier.Location = new System.Drawing.Point(277, 132);
+            this.cbInzynier.Name = "cbInzynier";
+            this.cbInzynier.Size = new System.Drawing.Size(172, 21);
+            this.cbInzynier.TabIndex = 24;
+            // 
             // NowySort
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(622, 282);
+            this.Controls.Add(this.cbInzynier);
+            this.Controls.Add(this.cbFirma);
+            this.Controls.Add(this.cbLinia);
+            this.Controls.Add(this.dataPicker);
             this.Controls.Add(this.labelInformacja);
             this.Controls.Add(this.btnDodajSort);
             this.Controls.Add(this.btnZamknij);
@@ -209,14 +219,10 @@
             this.Controls.Add(this.labelLinia);
             this.Controls.Add(this.labelPrefix);
             this.Controls.Add(this.labelNumerCzesci);
-            this.Controls.Add(this.tbInzynier);
-            this.Controls.Add(this.tbDostawcaCzesci);
-            this.Controls.Add(this.tbDataUruchomienia);
-            this.Controls.Add(this.tbLinia);
             this.Controls.Add(this.tbNumerCzesci);
             this.Controls.Add(this.tbPrefix);
             this.Name = "NowySort";
-            this.Text = "NowySort";
+            this.Text = "Dodaj nowe sortowanie";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -226,10 +232,6 @@
 
         private System.Windows.Forms.TextBox tbPrefix;
         private System.Windows.Forms.TextBox tbNumerCzesci;
-        private System.Windows.Forms.TextBox tbLinia;
-        private System.Windows.Forms.TextBox tbDataUruchomienia;
-        private System.Windows.Forms.TextBox tbDostawcaCzesci;
-        private System.Windows.Forms.TextBox tbInzynier;
         private System.Windows.Forms.Label labelNumerCzesci;
         private System.Windows.Forms.Label labelPrefix;
         private System.Windows.Forms.Label labelLinia;
@@ -241,5 +243,9 @@
         private System.Windows.Forms.Button btnDodajSort;
         private System.Windows.Forms.Button btnZamknij;
         private System.Windows.Forms.Label labelInformacja;
+        private System.Windows.Forms.DateTimePicker dataPicker;
+        private System.Windows.Forms.ComboBox cbLinia;
+        private System.Windows.Forms.ComboBox cbFirma;
+        private System.Windows.Forms.ComboBox cbInzynier;
     }
 }

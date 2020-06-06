@@ -43,15 +43,16 @@
             this.colDostawca = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colInzynier = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colOpis = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.customInstaller1 = new MySql.Data.MySqlClient.CustomInstaller();
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.customInstaller1 = new MySql.Data.MySqlClient.CustomInstaller();
+            this.btnSlowniki = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnDodajSort
             // 
-            this.btnDodajSort.Location = new System.Drawing.Point(8, 144);
+            this.btnDodajSort.Location = new System.Drawing.Point(3, 150);
             this.btnDodajSort.Name = "btnDodajSort";
-            this.btnDodajSort.Size = new System.Drawing.Size(149, 53);
+            this.btnDodajSort.Size = new System.Drawing.Size(148, 53);
             this.btnDodajSort.TabIndex = 0;
             this.btnDodajSort.Text = "Dodaj sort";
             this.btnDodajSort.UseVisualStyleBackColor = true;
@@ -59,9 +60,9 @@
             // 
             // btnEdytujSort
             // 
-            this.btnEdytujSort.Location = new System.Drawing.Point(6, 204);
+            this.btnEdytujSort.Location = new System.Drawing.Point(4, 210);
             this.btnEdytujSort.Name = "btnEdytujSort";
-            this.btnEdytujSort.Size = new System.Drawing.Size(148, 52);
+            this.btnEdytujSort.Size = new System.Drawing.Size(147, 52);
             this.btnEdytujSort.TabIndex = 1;
             this.btnEdytujSort.Text = "Edytuj sortu";
             this.btnEdytujSort.UseVisualStyleBackColor = true;
@@ -69,9 +70,9 @@
             // 
             // btnUsunSort
             // 
-            this.btnUsunSort.Location = new System.Drawing.Point(6, 262);
+            this.btnUsunSort.Location = new System.Drawing.Point(4, 268);
             this.btnUsunSort.Name = "btnUsunSort";
-            this.btnUsunSort.Size = new System.Drawing.Size(148, 53);
+            this.btnUsunSort.Size = new System.Drawing.Size(147, 53);
             this.btnUsunSort.TabIndex = 2;
             this.btnUsunSort.Text = "Usun sort";
             this.btnUsunSort.UseVisualStyleBackColor = true;
@@ -79,7 +80,7 @@
             // 
             // btnZakonczoneSorty
             // 
-            this.btnZakonczoneSorty.Location = new System.Drawing.Point(8, 85);
+            this.btnZakonczoneSorty.Location = new System.Drawing.Point(3, 91);
             this.btnZakonczoneSorty.Name = "btnZakonczoneSorty";
             this.btnZakonczoneSorty.Size = new System.Drawing.Size(148, 53);
             this.btnZakonczoneSorty.TabIndex = 3;
@@ -89,9 +90,9 @@
             // 
             // btnRaporty
             // 
-            this.btnRaporty.Location = new System.Drawing.Point(7, 321);
+            this.btnRaporty.Location = new System.Drawing.Point(4, 327);
             this.btnRaporty.Name = "btnRaporty";
-            this.btnRaporty.Size = new System.Drawing.Size(148, 53);
+            this.btnRaporty.Size = new System.Drawing.Size(147, 53);
             this.btnRaporty.TabIndex = 4;
             this.btnRaporty.Text = "Raporty ";
             this.btnRaporty.UseVisualStyleBackColor = true;
@@ -99,9 +100,9 @@
             // 
             // btnZamknij
             // 
-            this.btnZamknij.Location = new System.Drawing.Point(7, 380);
+            this.btnZamknij.Location = new System.Drawing.Point(4, 386);
             this.btnZamknij.Name = "btnZamknij";
-            this.btnZamknij.Size = new System.Drawing.Size(148, 53);
+            this.btnZamknij.Size = new System.Drawing.Size(147, 53);
             this.btnZamknij.TabIndex = 5;
             this.btnZamknij.Text = "Zamknij";
             this.btnZamknij.UseVisualStyleBackColor = true;
@@ -109,7 +110,7 @@
             // 
             // btnListaAktywnychSortów
             // 
-            this.btnListaAktywnychSortów.Location = new System.Drawing.Point(7, 26);
+            this.btnListaAktywnychSortów.Location = new System.Drawing.Point(2, 32);
             this.btnListaAktywnychSortów.Name = "btnListaAktywnychSortów";
             this.btnListaAktywnychSortów.Size = new System.Drawing.Size(149, 53);
             this.btnListaAktywnychSortów.TabIndex = 6;
@@ -131,7 +132,7 @@
             this.listaAktywnychSortow.FullRowSelect = true;
             this.listaAktywnychSortow.GridLines = true;
             this.listaAktywnychSortow.HideSelection = false;
-            this.listaAktywnychSortow.Location = new System.Drawing.Point(163, 26);
+            this.listaAktywnychSortow.Location = new System.Drawing.Point(163, 32);
             this.listaAktywnychSortow.MultiSelect = false;
             this.listaAktywnychSortow.Name = "listaAktywnychSortow";
             this.listaAktywnychSortow.Size = new System.Drawing.Size(870, 407);
@@ -178,11 +179,22 @@
             // 
             this.colStatus.Text = "Sort Aktywny";
             // 
+            // btnSlowniki
+            // 
+            this.btnSlowniki.Location = new System.Drawing.Point(2, 1);
+            this.btnSlowniki.Name = "btnSlowniki";
+            this.btnSlowniki.Size = new System.Drawing.Size(147, 25);
+            this.btnSlowniki.TabIndex = 8;
+            this.btnSlowniki.Text = "Slowniki";
+            this.btnSlowniki.UseVisualStyleBackColor = true;
+            this.btnSlowniki.Click += new System.EventHandler(this.btnSlowniki_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1039, 450);
+            this.ClientSize = new System.Drawing.Size(1035, 444);
+            this.Controls.Add(this.btnSlowniki);
             this.Controls.Add(this.listaAktywnychSortow);
             this.Controls.Add(this.btnListaAktywnychSortów);
             this.Controls.Add(this.btnZamknij);
@@ -192,7 +204,7 @@
             this.Controls.Add(this.btnEdytujSort);
             this.Controls.Add(this.btnDodajSort);
             this.Name = "Menu";
-            this.Text = "Form1";
+            this.Text = "Platforma";
             this.ResumeLayout(false);
 
         }
@@ -216,6 +228,7 @@
         private System.Windows.Forms.ColumnHeader colInzynier;
         private System.Windows.Forms.ColumnHeader colOpis;
         private System.Windows.Forms.ColumnHeader colStatus;
+        private System.Windows.Forms.Button btnSlowniki;
     }
 }
 
